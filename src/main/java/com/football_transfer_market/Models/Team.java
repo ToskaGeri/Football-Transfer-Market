@@ -24,7 +24,9 @@ public class Team {
     @Column(name = "Team_Budget")
     private Double teamBudget;
 
-    private Long countryId;
+    @ManyToOne
+    @JoinColumn(name = "Country_Id")
+    private Country country;
 
     @OneToMany
     @JsonIgnoreProperties({"hibernateLazyInitializer", "Handler"})

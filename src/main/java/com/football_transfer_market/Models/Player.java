@@ -47,6 +47,10 @@ public class Player {
 
     private String teamName;
 
+    @OneToOne
+    @JoinColumn(name = "Team_Id")
+    private Team team;
+
     @OneToMany
     @JsonIgnoreProperties({"hibernateLazyInitializer", "Handler"})
     private List<TransferOffer> transferOffers;

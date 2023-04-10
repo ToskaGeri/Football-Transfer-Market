@@ -1,10 +1,9 @@
 package com.football_transfer_market.Controller;
 
+import com.football_transfer_market.Dto.TeamPlayerDto;
 import com.football_transfer_market.Models.*;
 import com.football_transfer_market.Repository.*;
-import com.football_transfer_market.Service.SearchService;
-import com.football_transfer_market.Service.SearchServiceImp;
-import com.football_transfer_market.Service.TransferOfferService;
+import com.football_transfer_market.Service.*;
 import com.football_transfer_market.errors.CustomError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -41,6 +40,12 @@ public class MainController {
     @Autowired
     private TeamPlayersRepository teamPlayersRepository;
 
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    private TeamService teamService;
+
 
     @GetMapping("/countries")
     public ApiResponse<List<Country>> allCountries() {
@@ -53,8 +58,8 @@ public class MainController {
     }
 
     @GetMapping("/players")
-    public List<Player> allPlayers() {
-        return playerRepository.findAll(Sort.by(Sort.Direction.ASC,"playerId"));
+    public List<TeamPlayerDto> allPlayers() {
+        return playerService.getAllPlayers();
     }
 
     @PostMapping("/offer")
@@ -63,7 +68,7 @@ public class MainController {
 
         Player player = playerRepository.getReferenceById(transferOffer.getPlayerId());
         Team team = teamRepository.findTeamByTeamName(transferOffer.getTeamName());
-        Country country = countryRepository.getReferenceById(team.getCountryId());
+        Country country = countryRepository.getReferenceById(team.getCountry().getCountryId());
 
         double offeredPrice = transferOffer.getOfferValue();
         int limitPrice = (player.getPlayerPrice() * 60) / 100;

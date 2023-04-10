@@ -1,6 +1,6 @@
 package com.football_transfer_market.Repository;
 
-import com.football_transfer_market.Models.Team;
+
 import com.football_transfer_market.Models.TeamPlayerDatePrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
