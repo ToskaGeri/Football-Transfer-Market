@@ -1,33 +1,36 @@
 package com.football_transfer_market.Service;
 
-import com.football_transfer_market.Dto.TeamCountryDto;
 import com.football_transfer_market.Dto.TeamPlayerDto;
 import com.football_transfer_market.Models.Player;
-import com.football_transfer_market.Models.Team;
 import com.football_transfer_market.Repository.PlayerRepository;
+import com.football_transfer_market.utils.mapper.PlayerMapper;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+
+    private final PlayerRepository playerRepository;
+
+    private final PlayerMapper playerMapper;
+
+    public PlayerService(ModelMapper modelMapper, PlayerRepository playerRepository, PlayerMapper playerMapper) {
+        this.modelMapper = modelMapper;
+        this.playerRepository = playerRepository;
+        this.playerMapper = playerMapper;
+    }
 
     public List<TeamPlayerDto> getAllPlayers(){
         return playerRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private TeamPlayerDto convertEntityToDto(Player player) {
@@ -43,12 +46,10 @@ public class PlayerService {
 
     private Player convertDtoToEntity(TeamPlayerDto teamPlayerDto) {
 
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
-        Player player;
-        new Player();
-        player = modelMapper.map(teamPlayerDto,Player.class);
-        return player;
+        //TODO Shembull MapStruct shiko interface PlayerMapper e cila nepermjet mapstruct, pasi i jep run projektit gjeneron klasen PlayerMapperImpl ne folderin target tek generated sources
+        // aty mund te kuptosh se si e ben mapimin dhe cfare gjeje automatizon mapstruct
+        // pasi ta shikosh kete meso edhe perdorimin e annotation @Mapping(target = .. source = ) tel kjo interface dhe bej nje shembull diku ku ka kuptim te perdoret
+        return playerMapper.toEntity(teamPlayerDto);
     }
 
 }

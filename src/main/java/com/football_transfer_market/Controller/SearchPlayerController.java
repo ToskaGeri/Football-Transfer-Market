@@ -11,10 +11,7 @@ import com.football_transfer_market.Service.SearchService;
 import com.football_transfer_market.spec.PlayerSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,6 +73,10 @@ public class SearchPlayerController {
         return new ApiResponse<>(playerRepository.searchPlayersByTeamName(teamName),"OK");
     }
 
+    /* TODO Beje @PostMapping dhe mos ja jep parametrat me @RequestParam por me @RequestBody direkt si objekt sepse jane shume parametra qe tja kalosh ne url
+      *   Shembull
+      *   public ApiResponse<List<Player>> searchByAll(@RequestBody PlayerSearchDto playerSearchDto)
+      * */
     @GetMapping("/")
     public ApiResponse<List<Player>> searchByAll(@RequestParam(value = "name",required = false) String name,
                                                   @RequestParam(value = "surname",required = false) String surname,
