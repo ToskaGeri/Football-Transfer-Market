@@ -4,7 +4,6 @@ import com.football_transfer_market.Models.Player;
 import com.football_transfer_market.Models.TeamPlayerDatePrice;
 import com.football_transfer_market.Repository.PlayerRepository;
 import com.football_transfer_market.Repository.TeamPlayersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,11 +12,14 @@ import java.util.List;
 @Service
 public class SearchServiceImp implements SearchService{
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private TeamPlayersRepository teamPlayersRepository;
+    private final TeamPlayersRepository teamPlayersRepository;
+
+    public SearchServiceImp(PlayerRepository playerRepository, TeamPlayersRepository teamPlayersRepository) {
+        this.playerRepository = playerRepository;
+        this.teamPlayersRepository = teamPlayersRepository;
+    }
 
     public List<Player> searchPlayersByName(String name){
         return playerRepository.searchPlayersByPlayerName(name);

@@ -5,12 +5,10 @@ import com.football_transfer_market.Models.*;
 import com.football_transfer_market.Repository.*;
 import com.football_transfer_market.Service.*;
 import com.football_transfer_market.errors.CustomError;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static com.football_transfer_market.utils.ErrorConstants.*;
@@ -19,32 +17,29 @@ import static com.football_transfer_market.utils.ErrorConstants.*;
 @RequestMapping("/TransferMarket")
 public class MainController {
 
-    @Autowired
-    private CountryRepository countryRepository;
+    private final CountryRepository countryRepository;
 
-    @Autowired
-    private TeamRepository teamRepository;
+    private final TeamRepository teamRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private TransferOfferRepository transferOfferRepository;
+    private final TransferOfferRepository transferOfferRepository;
 
-    @Autowired
-    private TransferOfferService transferOfferService;
+    private final TransferOfferService transferOfferService;
 
-    @Autowired
-    private SearchService searchService;
+    private final TeamPlayersRepository teamPlayersRepository;
 
-    @Autowired
-    private TeamPlayersRepository teamPlayersRepository;
+    private final PlayerService playerService;
 
-    @Autowired
-    private PlayerService playerService;
-
-    @Autowired
-    private TeamService teamService;
+    public MainController(CountryRepository countryRepository, TeamRepository teamRepository, PlayerRepository playerRepository, TransferOfferRepository transferOfferRepository, TransferOfferService transferOfferService, TeamPlayersRepository teamPlayersRepository, PlayerService playerService) {
+        this.countryRepository = countryRepository;
+        this.teamRepository = teamRepository;
+        this.playerRepository = playerRepository;
+        this.transferOfferRepository = transferOfferRepository;
+        this.transferOfferService = transferOfferService;
+        this.teamPlayersRepository = teamPlayersRepository;
+        this.playerService = playerService;
+    }
 
 
     @GetMapping("/countries")

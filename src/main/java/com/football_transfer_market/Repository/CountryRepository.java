@@ -6,7 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Long> {
-
-    Country findCountryByCountryName(String countryName);
-    Country getCountryByCountryName(String countryName);
 }

@@ -2,21 +2,13 @@ package com.football_transfer_market.Controller;
 
 import com.football_transfer_market.Models.ApiResponse;
 import com.football_transfer_market.Models.Player;
-import com.football_transfer_market.Models.Team;
 import com.football_transfer_market.Models.TeamPlayerDatePrice;
 import com.football_transfer_market.Repository.PlayerRepository;
-import com.football_transfer_market.Repository.TeamPlayersRepository;
-import com.football_transfer_market.Repository.TeamRepository;
 import com.football_transfer_market.Service.SearchService;
 import com.football_transfer_market.spec.PlayerSpec;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,17 +16,16 @@ import java.util.List;
 @RequestMapping("/TransferMarket/search/player")
 public class SearchPlayerController {
 
-    @Autowired
-    private PlayerRepository playerRepository;
 
-    @Autowired
-    private SearchService searchService;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private TeamPlayersRepository teamPlayersRepository;
+    private final SearchService searchService;
 
-    @Autowired
-    private TeamRepository teamRepository;
+
+    public SearchPlayerController(PlayerRepository playerRepository, SearchService searchService) {
+        this.playerRepository = playerRepository;
+        this.searchService = searchService;
+    }
 
     @GetMapping("/ByName")
     public ApiResponse<List<Player>> searchByName(@RequestParam("name") String name){
@@ -76,17 +67,12 @@ public class SearchPlayerController {
         return new ApiResponse<>(playerRepository.searchPlayersByTeamName(teamName),"OK");
     }
 
-    @GetMapping("/")
-    public ApiResponse<List<Player>> searchByAll(@RequestParam(value = "name",required = false) String name,
-                                                  @RequestParam(value = "surname",required = false) String surname,
-                                                  @RequestParam(value = "age",required = false,defaultValue = "0") int age,
-                                                  @RequestParam(value = "isFreeAgent",required = false) boolean isFreeAgent,
-                                                  @RequestParam(value = "nation",required = false) String nation,
-                                                  @RequestParam(value = "position",required = false) String position,
-                                                  @RequestParam(value = "teamName",required = false) String teamName,
-                                                  @RequestParam(value = "price",required = false,defaultValue = "0") int price) {
+    @PostMapping("/")
+    public ApiResponse<List<Player>> searchByAll(@RequestBody Player player) {
 
-        Specification<Player> specification = PlayerSpec.getSpec(name,surname,age,isFreeAgent,nation,position,price,teamName);
+        Specification<Player> specification = PlayerSpec.getSpec(player.getPlayerName(), player.getPlayerSurname(),
+                player.getAge(), player.isFreeAgent(), player.getPlayerNation(), player.getPlayerPosition(), player.getPlayerPrice(),
+                player.getTeamName());
         return new ApiResponse<>(playerRepository.findAll(specification),"OK");
     }
 

@@ -1,54 +1,44 @@
 package com.football_transfer_market.Service;
 
-import com.football_transfer_market.Dto.TeamCountryDto;
 import com.football_transfer_market.Dto.TeamPlayerDto;
 import com.football_transfer_market.Models.Player;
-import com.football_transfer_market.Models.Team;
 import com.football_transfer_market.Repository.PlayerRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.football_transfer_market.mapper.PlayerMapper;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final PlayerRepository playerRepository;
+    private final PlayerMapper playerMapper;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    public PlayerService( PlayerRepository playerRepository, PlayerMapper playerMapper) {
+        this.playerRepository = playerRepository;
+        this.playerMapper = playerMapper;
+    }
 
     public List<TeamPlayerDto> getAllPlayers(){
         return playerRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private TeamPlayerDto convertEntityToDto(Player player) {
 
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
-        TeamPlayerDto teamPlayerDto;
-        new TeamPlayerDto();
-        teamPlayerDto = modelMapper.map(player, TeamPlayerDto.class);
-        teamPlayerDto.setTeamId(player.getTeam().getTeamId());
-        return teamPlayerDto;
+//        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+//
+//        TeamPlayerDto teamPlayerDto;
+//        new TeamPlayerDto();
+//        teamPlayerDto = modelMapper.map(player, TeamPlayerDto.class);
+//        teamPlayerDto.setTeamId(player.getTeam().getTeamId());
+//        return teamPlayerDto;
+        return playerMapper.toDto(player);
     }
 
     private Player convertDtoToEntity(TeamPlayerDto teamPlayerDto) {
-
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
-        Player player;
-        new Player();
-        player = modelMapper.map(teamPlayerDto,Player.class);
-        return player;
+        return playerMapper.toEntity(teamPlayerDto);
     }
 
 }
